@@ -4,60 +4,109 @@
 
 void archivoNormalizarIcc(FILE* pf)
 {
-    char linea[59];
+    char linea[TAM_LINEA];
     sArchivo arch;
 
     rewind(pf);
-    fgets(linea, sizeof(linea), pf);
+    fgets(linea, TAM_LINEA, pf);
 
-    while(fgets(linea, sizeof(linea), pf))
+    while(fgets(linea, TAM_LINEA, pf))
     {
-        sscanf(linea, "\"%d/%d/%d\";\"%31[^\"]\";%s", &arch.fecha.dia, &arch.fecha.mes, &arch.fecha.anio, arch.nivel, arch.indice);
-        printf("%s", linea);
+        leerLinea(linea, &arch);
+        printf("VIEJA:%s", linea);
+
         fseek(pf, (-1)*(strlen(linea)+1), SEEK_CUR);
-        fprintf(pf, "\"%d-%d-%d\";\"%s\";%s\n", arch.fecha.anio, arch.fecha.mes, arch.fecha.dia, arch.nivel, arch.indice);
+
+        modificarLinea(linea, &arch);
+        escribirLinea(pf, linea, &arch);
+
+        printf("NUEVA:%s\n", linea);
+    }
+}
+
+void leerLinea(char* linea, sArchivo* arch)
+{
+    if(strchr(linea, '/'))
+        sscanf(linea, "\"%d/%d/%d\";\"%31[^\"]\";%s", &arch->fecha.dia, &arch->fecha.mes, &arch->fecha.anio, arch->nivel, arch->indice);
+
+    else if(strchr(linea, '-'))
+        sscanf(linea, "\"%d-%d-%d\";\"%31[^\"]\";%s", &arch->fecha.anio, &arch->fecha.mes, &arch->fecha.dia, arch->nivel, arch->indice);
+}
+
+void modificarLinea(char* linea, sArchivo* arch)
+{
+    comaAPunto(arch);
+
+    if(!(strstr(arch->nivel, "nivel") || strstr(arch->nivel, "mat") || strstr(arch->nivel, "mano") || strstr(arch->nivel, "gastos")))
+        desencriptar(arch->nivel);
+
+    sprintf(linea, "\"%d-%d-%d\";\"%s\";%s\n", arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice);
+}
+
+void comaAPunto(sArchivo* arch)
+{
+    char* ptr = strchr(arch->indice, ',');
+
+    if(ptr)
+        *ptr = '.';
+}
+
+void escribirLinea(FILE* pf, char* linea, sArchivo* arch)
+{
+    char aux[TAM_LINEA];
+
+    fgets(aux, TAM_LINEA, pf);
+
+    if(strcmp(linea, aux))
+    {
+        fseek(pf, (-1)*(strlen(linea)+1), SEEK_CUR);
+        fprintf(pf, "\"%d-%d-%d\";\"%s\";%s\n", arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice);
         fflush(pf);
     }
+
 }
 
 //FUNCIONES AUXILIARES
-/*
-void desencriptar (char* str)
+
+void desencriptar(char* str)
 {
-    char* ABC = "abcdefghijklmnñopqrstuvwxyz";
-    char* ptrIn = ABC;
-    int pos;
-    int longABC = strlong(ABC);
+    char ABC[] = "abcdefghijklmnopqrstuvwxyz";
+    char* ptr = ABC;
+    int pos = 0;
+    int lugar = 0;
+    int longABC = strlen(ABC);
 
     while(*str)
     {
-        while(*str && !esLetra(*str))
+        pos++;
+
+        while(*str && !ES_LETRA(*str))
             str++;
 
-        while(*str && esLetra(*str))
+        while(*str && ES_LETRA(*str))
         {
-            pos = buscarStr(ABC, *str);
-            ABC += pos;
+            lugar = 0;
+
+            while(*str != *ptr)
+            {
+                ptr++;
+                lugar++;
+            }
 
             if(pos%2 == 0)
-            {
-                *str = *(ABC + 4);
-            }
+                *str = *(ABC +(2+lugar)%longABC);
 
             else
-            {
-                *str = *(ABC + 2);
-            }
+                *str = *(ABC +(4+lugar)%longABC);
 
-            ABC = ptrIn;
+            ptr = ABC;
+            pos++;
             str++;
         }
-
-        str++;
     }
 }
 
-
+/*
 char* normalizar(char* str)
 {
     char* inicio = str;
