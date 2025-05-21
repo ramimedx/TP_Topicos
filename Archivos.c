@@ -35,17 +35,20 @@ void leerLinea(char* linea, sArchivo* arch)
 
 void modificarLinea(char* linea, sArchivo* arch)
 {
-    comaAPunto(arch);
+    comaAPunto(arch->indice);
 
-    if(!(strstr(arch->nivel, "nivel") || strstr(arch->nivel, "mat") || strstr(arch->nivel, "mano") || strstr(arch->nivel, "gastos")))
+    if(!(strstr(arch->nivel, "ivel") || strstr(arch->nivel, "ateriales") || strstr(arch->nivel, "obra") || strstr(arch->nivel, "astos")))
         desencriptar(arch->nivel);
+
+    if(strchr(arch->nivel, '_') || strstr(arch->nivel, "materiales"))
+        normalizar(arch->nivel);
 
     sprintf(linea, "\"%d-%d-%d\";\"%s\";%s\n", arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice);
 }
 
-void comaAPunto(sArchivo* arch)
+void comaAPunto(char* indice)
 {
-    char* ptr = strchr(arch->indice, ',');
+    char* ptr = strchr(indice, ',');
 
     if(ptr)
         *ptr = '.';
@@ -106,38 +109,16 @@ void desencriptar(char* str)
     }
 }
 
-/*
-char* normalizar(char* str)
+void normalizar(char* str)
 {
-    char* inicio = str;
-    char* ptrAux = str;
+    *str = A_MAYUS(*str);
 
     while(*str)
     {
-        while(*str && esLETRA(*str))
-        {
-            if(str == inicio)
-                *ptrAux = aMAYUS(*str);
-            else if(!esLETRA(*(str-1)))
-                *ptrAux = aMAYUS(*str);
-            else
-                *ptrAux = aMINUS(*str);
-
-            ptrAux++;
-            str++;
-        }
-
-        if(*str && *str == '_')
-        {
-            *ptrAux = ' ';
-            ptrAux++;
-        }
+        if(*str == '_')
+            *str = ' ';
 
         str++;
     }
-
-    *ptrAux = '\0';
-
-    return inicio;
-}*/
+}
 
