@@ -35,18 +35,18 @@ void leerLinea(char* linea, sArchivo* arch)
 
 void modificarLinea(char* linea, sArchivo* arch)
 {
-    comaAPunto(arch->indice);
+    comaAPuntoICC(arch->indice);
 
     if(!(strstr(arch->nivel, "ivel") || strstr(arch->nivel, "ateriales") || strstr(arch->nivel, "obra") || strstr(arch->nivel, "astos")))
-        desencriptar(arch->nivel);
+        desencriptarICC(arch->nivel);
 
     if(strchr(arch->nivel, '_') || strstr(arch->nivel, "materiales"))
-        normalizar(arch->nivel);
+        normalizarICC(arch->nivel);
 
     sprintf(linea, "\"%d-%d-%d\";\"%s\";%s\n", arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice);
 }
 
-void comaAPunto(char* indice)
+void comaAPuntoICC(char* indice)
 {
     char* ptr = strchr(indice, ',');
 
@@ -71,7 +71,7 @@ void escribirLinea(FILE* pf, char* linea, sArchivo* arch)
 
 //FUNCIONES AUXILIARES
 
-void desencriptar(char* str)
+void desencriptarICC(char* str)
 {
     char ABC[] = "abcdefghijklmnopqrstuvwxyz";
     char* ptr = ABC;
@@ -82,9 +82,6 @@ void desencriptar(char* str)
     while(*str)
     {
         pos++;
-
-        while(*str && !ES_LETRA(*str))
-            str++;
 
         while(*str && ES_LETRA(*str))
         {
@@ -106,10 +103,13 @@ void desencriptar(char* str)
             pos++;
             str++;
         }
+
+        while(*str && !ES_LETRA(*str))
+            str++;
     }
 }
 
-void normalizar(char* str)
+void normalizarICC(char* str)
 {
     *str = A_MAYUS(*str);
 

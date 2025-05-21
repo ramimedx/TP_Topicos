@@ -29,11 +29,11 @@ typedef struct
 void archivoNormalizarIcc(FILE* pf);
 void leerLinea(char* linea, sArchivo* arch);
 void modificarLinea(char* linea, sArchivo* arch);
-void comaAPunto(char* indice);
+void comaAPuntoICC(char* indice);
 void escribirLinea(FILE* pf, char* linea, sArchivo* arch);
 
 // FUNCIONES AUXILIARES
-void desencriptar(char* str);
-void normalizar(char* str);
+void desencriptarICC(char* str);
+void normalizarICC(char* str);
 
 #endif // ARCHIVOS_H_INCLUDED
