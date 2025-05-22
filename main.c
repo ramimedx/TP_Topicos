@@ -11,7 +11,16 @@ int main()
         return -1;
     }
 
-    archivoNormalizarIcc(pf1);
+    //archivoCorregirIcc(pf1);
+
+    char ejemplo[] = "5_19$7@|@c109_$@917@r1@_y_c097r@19c39d10";
+    desencriptarItemsObra(ejemplo);
+    puts("items obra desencriptado: ");
+    puts(ejemplo);
+
+    normalizarItemsObra(ejemplo);
+    puts("items obra normalizado: ");
+    puts(ejemplo);
 
     fclose(pf1);
 

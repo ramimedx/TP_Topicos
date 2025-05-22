@@ -2,7 +2,7 @@
 
 //FUNCIONES PRINCIPALES
 
-void archivoNormalizarIcc(FILE* pf)
+void archivoCorregirIcc(FILE* pf)
 {
     char linea[TAM_LINEA];
     sArchivo arch;
@@ -22,6 +22,11 @@ void archivoNormalizarIcc(FILE* pf)
 
         printf("NUEVA:%s\n", linea);
     }
+}
+
+void archivoCorregirItemsObra(FILE* pf)
+{
+
 }
 
 void leerLinea(char* linea, sArchivo* arch)
@@ -109,6 +114,31 @@ void desencriptarICC(char* str)
     }
 }
 
+void desencriptarItemsObra(char* str)
+{
+    char tabla[2][11] = {
+        {"@8310$7|59"},
+        {"abeiostlmn"}
+        };
+    int i;
+
+    while(*str)
+    {
+        i = 0;
+
+        if(*str && *str == '_')
+            str++;
+
+        while(i < 10 && tabla[0][i] != *str)
+            i++;
+
+        if(i < 10)
+            *str = tabla[1][i];
+
+        str++;
+    }
+}
+
 void normalizarICC(char* str)
 {
     *str = A_MAYUS(*str);
@@ -121,4 +151,35 @@ void normalizarICC(char* str)
         str++;
     }
 }
+
+void normalizarItemsObra(char* str)
+{
+    int band = 0;
+    char* inicio = str;
+    char* ult = str + strlen(str) - 1;
+    char* i;
+
+    while(*str)
+    {
+        if(band == 0 && *str == '_')
+        {
+            for(i = inicio; i < ult; i++)
+            {
+                *i = *(i + 1 + (str - inicio));
+            }
+
+            *i = '\0';
+            band = 1;
+
+            *inicio = A_MAYUS(*inicio);
+        }
+
+        if(*str == '_')
+            *str = ' ';
+
+        str++;
+    }
+}
+
+
 

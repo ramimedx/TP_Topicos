@@ -26,14 +26,18 @@ typedef struct
 }sArchivo;
 
 // FUNCIONES PRINCIPALES
-void archivoNormalizarIcc(FILE* pf);
+void archivoCorregirIcc(FILE* pf);
+void archivoCorregirItemsObra(FILE* pf); //HACER
 void leerLinea(char* linea, sArchivo* arch);
 void modificarLinea(char* linea, sArchivo* arch);
 void comaAPuntoICC(char* indice);
 void escribirLinea(FILE* pf, char* linea, sArchivo* arch);
+void agregarCampo(FILE* pf); //HACER
 
 // FUNCIONES AUXILIARES
 void desencriptarICC(char* str);
+void desencriptarItemsObra(char* str);
 void normalizarICC(char* str);
+void normalizarItemsObra(char* str);
 
 #endif // ARCHIVOS_H_INCLUDED
