@@ -23,6 +23,7 @@ typedef struct
     sFecha fecha;
     char nivel[31];
     char indice[17];
+    char clasificador[31];
 }sArchivo;
 
 // FUNCIONES PRINCIPALES
@@ -30,9 +31,11 @@ void archivoCorregirIcc(FILE* pf);
 void archivoCorregirItemsObra(FILE* pf); //HACER
 void leerLinea(char* linea, sArchivo* arch);
 void modificarLinea(char* linea, sArchivo* arch);
-void comaAPuntoICC(char* indice);
+void comaAPunto(char* indice);
 void escribirLinea(FILE* pf, char* linea, sArchivo* arch);
-void agregarCampo(FILE* pf); //HACER
+void agregarCampo(char* linea, sArchivo* arch); //HACER
+void modificarLineaIO(char* linea, sArchivo* arch);
+void escribirLineaIO(FILE* pf, char* linea, sArchivo* arch);
 
 // FUNCIONES AUXILIARES
 void desencriptarICC(char* str);
