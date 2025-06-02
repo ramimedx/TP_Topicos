@@ -35,7 +35,8 @@ void modificarLineaIO(char* linea, sArchivo* arch);
 void comaAPunto(char* indice);
 void escribirLineaIcc(FILE* pf, char* linea, sArchivo* arch);
 void escribirLineaIO(FILE* pf, char* linea, sArchivo* arch);
-void agregarCampo(sArchivo* arch);
+void agregarCampoIcc(sArchivo* arch);
+void agregarCampoIo(sArchivo* arch);
 
 // FUNCIONES AUXILIARES
 void desencriptarICC(char* str);
