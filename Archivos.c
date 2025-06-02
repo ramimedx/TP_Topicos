@@ -48,7 +48,7 @@ void modificarLineaIcc(char* linea, sArchivo* arch)
     if(strchr(arch->nivel, '_') || strstr(arch->nivel, "materiales"))
         normalizarICC(arch->nivel);
 
-    agregarCampo(arch);
+    agregarCampoIcc(arch);
 
     sprintf(linea, "\"%d-%d-%d\";\"%s\";%s;\"%s\"\n",
             arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice, arch->clasificador);
@@ -62,7 +62,7 @@ void comaAPunto(char* indice)
         *ptr = '.';
 }
 
-void agregarCampo(sArchivo* arch)
+void agregarCampoIcc(sArchivo* arch)
 {
     if(strstr(arch->nivel, "Nivel general"))
         strcpy(arch->clasificador, "Nivel general");
@@ -82,6 +82,7 @@ void archivoCorregirItemsObra(FILE* pf)
 {
     char linea[TAM_LINEA];
     sArchivo arch;
+    FILE* temp=fopen("temporal2.cvs","w+");
 
     rewind(pf);
     fgets(linea, TAM_LINEA, pf);
@@ -91,10 +92,10 @@ void archivoCorregirItemsObra(FILE* pf)
         leerLinea(linea, &arch);
         printf("VIEJA:%s", linea);
 
-        fseek(pf, (-1)*(strlen(linea)+1), SEEK_CUR);
+        //fseek(pf, (-1)*(strlen(linea)+1), SEEK_CUR);
 
         modificarLineaIO(linea, &arch);
-        escribirLineaIO(pf, linea, &arch);
+        escribirLineaIO(temp, linea, &arch);
 
         printf("NUEVA:%s\n", linea);
     }
@@ -105,14 +106,16 @@ void modificarLineaIO(char* linea, sArchivo* arch)
     comaAPunto(arch->indice);
     desencriptarItemsObra(arch->nivel);
 
-    //normalizarItemsObra(arch->nivel);
+    normalizarItemsObra(arch->nivel);
 
-    sprintf(linea, "\"%d-%d-%d\";\"%s\";%s\n", arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice);
+    agregarCampoIo(arch);
+
+    sprintf(linea, "\"%d-%d-%d\";\"%s\";%s\";%s\"\n", arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice,arch->clasificador);
 }
 
 void escribirLineaIO(FILE* pf, char* linea, sArchivo* arch)
 {
-    char aux[TAM_LINEA];
+   /* char aux[TAM_LINEA];
 
     fgets(aux, TAM_LINEA, pf);
 
@@ -122,6 +125,10 @@ void escribirLineaIO(FILE* pf, char* linea, sArchivo* arch)
         fprintf(pf, "\"%d-%d-%d\";\"%s\";%s\n", arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice);
         fflush(pf);
     }
+*/
+    fprintf(pf, "\"%d-%d-%d\";\"%s\";%s;\"%s\"\n",
+            arch->fecha.anio, arch->fecha.mes, arch->fecha.dia, arch->nivel, arch->indice, arch->clasificador);
+    fflush(pf);
 }
 //FUNCIONES AUXILIARES
 
@@ -229,3 +236,9 @@ void normalizarItemsObra(char* str)
         str++;
     }
 }
+
+void agregarCampoIo(sArchivo* arch)
+{
+    strcpy(arch->clasificador, "Items");
+}
+
