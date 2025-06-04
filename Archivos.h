@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TAM_LINEA 59
+#define TAM_LINEA 75
 
 #define ES_LETRA(x) (((x) >= 'a' && (x) <= 'z') || ((x) >= 'A' && (x) <= 'Z') )
 #define A_MAYUS(x) ((x) >= 'a' && (x) <= 'z' ? (x) - ('a' - 'A') : (x))
