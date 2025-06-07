@@ -7,6 +7,9 @@
 
 #define TAM_LINEA 75
 
+#define ARCH_ICC_GENERAL_CAPITULOS "indices_icc_general_capitulos.csv"
+#define ARCH_ITEMS_OBRA "Indices_items_obra.csv"
+
 #define ES_LETRA(x) (((x) >= 'a' && (x) <= 'z') || ((x) >= 'A' && (x) <= 'Z') )
 #define A_MAYUS(x) ((x) >= 'a' && (x) <= 'z' ? (x) - ('a' - 'A') : (x))
 #define A_MINUS(x) ((x) >= 'A' && (x) <= 'Z' ? (x) + ('a' - 'A') : (x))
@@ -27,21 +30,17 @@ typedef struct
 }sArchivo;
 
 // FUNCIONES PRINCIPALES
-void archivoCorregirIcc(FILE* pf);
-void archivoCorregirItemsObra(FILE* pf);
+void archivoCorregir(FILE* pf, FILE* temp, const char* band);
 void leerLinea(char* linea, sArchivo* arch);
-void modificarLineaIcc(char* linea, sArchivo* arch);
-void modificarLineaIO(char* linea, sArchivo* arch);
+void modificarLinea(char* linea, sArchivo* arch, const char* band);
 void comaAPunto(char* indice);
-void escribirLineaIcc(FILE* pf, char* linea, sArchivo* arch);
-void escribirLineaIO(FILE* pf, char* linea, sArchivo* arch);
-void agregarCampoIcc(sArchivo* arch);
-void agregarCampoIo(sArchivo* arch);
+void escribirLinea(FILE* pf, char* linea, sArchivo* arch);
+void agregarCampo(sArchivo* arch, const char* band);
 
 // FUNCIONES AUXILIARES
 void desencriptarICC(char* str);
 void desencriptarItemsObra(char* str);
 void normalizarICC(char* str);
-void normalizarItemsObra(char* str);
+void normalizarIO(char* str);
 
 #endif // ARCHIVOS_H_INCLUDED
