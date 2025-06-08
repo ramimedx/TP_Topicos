@@ -19,6 +19,12 @@ int main()
     puts("Archivo IO: \n");
     archivoCorregir(pf2, pf3, ARCH_ITEMS_OBRA);
 
+    pf3 = ordenarArchivo(pf3);
+
+    pf3 = AgregarVariacionMensual(pf3);
+
+    pf3 = AgregarVariacionInteranual(pf3);
+
     fclose(pf1);
     fclose(pf2);
     fclose(pf3);
