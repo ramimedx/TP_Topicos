@@ -36,11 +36,22 @@ void modificarLinea(char* linea, sArchivo* arch, const char* band);
 void comaAPunto(char* indice);
 void escribirLinea(FILE* pf, char* linea, sArchivo* arch);
 void agregarCampo(sArchivo* arch, const char* band);
+FILE* ordenarArchivo (FILE* temp);
+FILE* AgregarVariacionMensual (FILE *temp);
+FILE* AgregarVariacionInteranual (FILE *temp);
+
 
 // FUNCIONES AUXILIARES
 void desencriptarICC(char* str);
 void desencriptarItemsObra(char* str);
 void normalizarICC(char* str);
 void normalizarIO(char* str);
-
+sArchivo* cargarRegistros (FILE* temp, int *cant_registros);
+void ordenarPorBurbujeo (sArchivo* vec_archivos, int cant_registros);
+int compararClasificador(const char* clasificador);
+int contarLineas (FILE *temp);
+void calcularVariacionMensual (sArchivo *vec_archivos, int cant_registros);
+double buscarIndiceActual (sArchivo *vec_archivos, int cant_registros, int i_mesAnterior, int *i_actual, const int band);
+void calcularVariacionMensual(sArchivo *vec_archivos, int cant_registros);
+void calcularVariacionInteranual(sArchivo *vec_archivos, int cant_registros);
 #endif // ARCHIVOS_H_INCLUDED
