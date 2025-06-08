@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TAM_LINEA 75
+#define TAM_LINEA 95
 
 #define ARCH_ICC_GENERAL_CAPITULOS "indices_icc_general_capitulos.csv"
 #define ARCH_ITEMS_OBRA "Indices_items_obra.csv"
@@ -27,6 +27,8 @@ typedef struct
     char nivel[50];
     char indice[18];
     char clasificador[31];
+    char variacionmensual [6];
+    char variacioninteranual [8];
 }sArchivo;
 
 // FUNCIONES PRINCIPALES
