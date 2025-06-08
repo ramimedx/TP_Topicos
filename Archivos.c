@@ -21,7 +21,7 @@ void archivoCorregir(FILE* pf, FILE* temp, const char* band)
         printf("VIEJA:%s", linea);
 
         modificarLinea(linea, &arch, band);
-        escribirLinea(temp, linea, &arch);
+        escribirLinea(temp, linea, &arch, 0);
 
         printf("NUEVA:%s\n", linea);
     }
