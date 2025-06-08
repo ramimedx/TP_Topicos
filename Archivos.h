@@ -36,7 +36,7 @@ void archivoCorregir(FILE* pf, FILE* temp, const char* band);
 void leerLinea(char* linea, sArchivo* arch);
 void modificarLinea(char* linea, sArchivo* arch, const char* band);
 void comaAPunto(char* indice);
-void escribirLinea(FILE* pf, char* linea, sArchivo* arch);
+void escribirLinea(FILE* pf, char* linea, sArchivo* arch, const int band);
 void agregarCampo(sArchivo* arch, const char* band);
 FILE* ordenarArchivo (FILE* temp);
 FILE* AgregarVariacionMensual (FILE *temp);
