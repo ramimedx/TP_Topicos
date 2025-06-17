@@ -125,7 +125,7 @@ FILE* ordenarArchivo (FILE* temp)
     if (ordenado == NULL)
     {
         puts ("Hubo un error al crear el archivo ordenado.");
-        exit (1);
+        return NULL;
     }
 
     Vector_archivos = cargarRegistros (temp, &cant_registros);
@@ -133,7 +133,7 @@ FILE* ordenarArchivo (FILE* temp)
     if ( Vector_archivos == NULL)
     {
         puts ("Hubo un error al cargar los registros en el vector.");
-        exit (1);
+        return NULL;
     }
 
     ordenarPorBurbujeo (Vector_archivos, cant_registros);
@@ -157,7 +157,7 @@ FILE* ordenarArchivo (FILE* temp)
     if (ordenado == NULL)
     {
         puts ("Hubo un error al crear el archivo ordenado.");
-        exit (1);
+        return NULL;
     }
 
     free(Vector_archivos);
@@ -182,7 +182,7 @@ FILE* AgregarVariacionMensual (FILE *temp)
     if (temp == NULL)
     {
         puts ("Hubo un error al crear el archivo temporal.");
-        exit (1);
+        return NULL;
     }
 
     fprintf(temp, "\"periodo\";\"nivel_general_aperturas\";\"indice_icc\";\"clasificador\";\"var_mensual\"\n");
@@ -212,7 +212,7 @@ FILE* AgregarVariacionInteranual (FILE* temp)
     if (temp == NULL)
     {
         puts ("Hubo un error al crear el archivo temporal.");
-        exit (1);
+        return NULL;
     }
 
     fprintf(temp, "\"periodo\";\"nivel_general_aperturas\";\"indice_icc\";\"clasificador\";\"var_mensual\";\"var_interanual\"\n");
@@ -224,7 +224,58 @@ FILE* AgregarVariacionInteranual (FILE* temp)
 
     return temp;
 }
+/*
+int convertirABinario(FILE* temp)
+{
+    FILE* bin = fopen("indice_icc_final.dat", "wb");
+    sArchBin archBin;
+    char linea[TAM_LINEA];
 
+    rewind(temp);
+
+    if(bin == NULL)
+    {
+        puts ("Hubo un error al crear el archivo binario");
+        return ERR_ARCHIVO;
+    }
+
+    while(fgets(linea, TAM_LINEA, temp))
+    {
+
+    }
+
+}
+
+void trozarArchivo (char* linea, sArchBin archBin)
+{
+    char* nl = linea;
+
+    nl = strrchr(linea, '\n');
+
+    *nl = '\0';
+
+    nl -= 7;
+    sscanf(nl, "%f", );
+    *nl = '\0';
+
+    nl -= 5;
+    sscanf(nl, "%f", );
+    *nl = '\0';
+
+    nl -= 30;
+    strcpy(archBin->clasificador, nl)
+    *nl = '\0';
+
+    nl -= 18;
+    sscanf(nl, "lf", archBin->valor);
+    *nl = '\0';
+
+    nl -= 50;
+    strcpy(archBin->nivel, linea);
+
+
+}
+*/
 //FUNCIONES AUXILIARES
 
 void desencriptarICC(char* str)

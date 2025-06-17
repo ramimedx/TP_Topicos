@@ -6,6 +6,7 @@
 #include <string.h>
 
 #define TAM_LINEA 95
+#define ERR_ARCHIVO -1
 
 #define ARCH_ICC_GENERAL_CAPITULOS "indices_icc_general_capitulos.csv"
 #define ARCH_ITEMS_OBRA "Indices_items_obra.csv"
@@ -31,6 +32,15 @@ typedef struct
     char variacioninteranual [8];
 }sArchivo;
 
+typedef struct
+{
+    sFecha periodo;
+    char clasificador[31];
+    char nivel[50];
+    char variable[12];
+    double valor;
+}sArchBin;
+
 // FUNCIONES PRINCIPALES
 void archivoCorregir(FILE* pf, FILE* temp, const char* band);
 void leerLinea(char* linea, sArchivo* arch);
@@ -41,7 +51,8 @@ void agregarCampo(sArchivo* arch, const char* band);
 FILE* ordenarArchivo (FILE* temp);
 FILE* AgregarVariacionMensual (FILE *temp);
 FILE* AgregarVariacionInteranual (FILE *temp);
-
+// int convertirABinario(FILE* temp);
+// void trozarArchivo (char* linea, sArchBin archBin);
 
 // FUNCIONES AUXILIARES
 void desencriptarICC(char* str);
