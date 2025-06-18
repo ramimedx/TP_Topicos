@@ -125,7 +125,7 @@ FILE* ordenarArchivo (FILE* temp)
     if (ordenado == NULL)
     {
         puts ("Hubo un error al crear el archivo ordenado.");
-        return NULL;
+        exit (1);
     }
 
     Vector_archivos = cargarRegistros (temp, &cant_registros);
@@ -133,7 +133,7 @@ FILE* ordenarArchivo (FILE* temp)
     if ( Vector_archivos == NULL)
     {
         puts ("Hubo un error al cargar los registros en el vector.");
-        return NULL;
+        exit (1);
     }
 
     ordenarPorBurbujeo (Vector_archivos, cant_registros);
@@ -157,7 +157,7 @@ FILE* ordenarArchivo (FILE* temp)
     if (ordenado == NULL)
     {
         puts ("Hubo un error al crear el archivo ordenado.");
-        return NULL;
+        exit (1);
     }
 
     free(Vector_archivos);
@@ -182,7 +182,7 @@ FILE* AgregarVariacionMensual (FILE *temp)
     if (temp == NULL)
     {
         puts ("Hubo un error al crear el archivo temporal.");
-        return NULL;
+        exit (1);
     }
 
     fprintf(temp, "\"periodo\";\"nivel_general_aperturas\";\"indice_icc\";\"clasificador\";\"var_mensual\"\n");
@@ -212,10 +212,8 @@ FILE* AgregarVariacionInteranual (FILE* temp)
     if (temp == NULL)
     {
         puts ("Hubo un error al crear el archivo temporal.");
-        return NULL;
+        exit (1);
     }
-
-    fprintf(temp, "\"periodo\";\"nivel_general_aperturas\";\"indice_icc\";\"clasificador\";\"var_mensual\";\"var_interanual\"\n");
 
     for (i = 0; i < cant_registros; i++)
         escribirLinea(temp, linea, vec_archivos+i,2);
@@ -224,58 +222,7 @@ FILE* AgregarVariacionInteranual (FILE* temp)
 
     return temp;
 }
-/*
-int convertirABinario(FILE* temp)
-{
-    FILE* bin = fopen("indice_icc_final.dat", "wb");
-    sArchBin archBin;
-    char linea[TAM_LINEA];
 
-    rewind(temp);
-
-    if(bin == NULL)
-    {
-        puts ("Hubo un error al crear el archivo binario");
-        return ERR_ARCHIVO;
-    }
-
-    while(fgets(linea, TAM_LINEA, temp))
-    {
-
-    }
-
-}
-
-void trozarArchivo (char* linea, sArchBin archBin)
-{
-    char* nl = linea;
-
-    nl = strrchr(linea, '\n');
-
-    *nl = '\0';
-
-    nl -= 7;
-    sscanf(nl, "%f", );
-    *nl = '\0';
-
-    nl -= 5;
-    sscanf(nl, "%f", );
-    *nl = '\0';
-
-    nl -= 30;
-    strcpy(archBin->clasificador, nl)
-    *nl = '\0';
-
-    nl -= 18;
-    sscanf(nl, "lf", archBin->valor);
-    *nl = '\0';
-
-    nl -= 50;
-    strcpy(archBin->nivel, linea);
-
-
-}
-*/
 //FUNCIONES AUXILIARES
 
 void desencriptarICC(char* str)
@@ -580,4 +527,60 @@ void calcularVariacionInteranual(sArchivo *vec_archivos, int cant_registros)
             i++;
         }
     }
+}
+
+void crearArchivoUnificado(FILE* pf1, FILE* pf2)
+{
+    char linea[TAM_LINEA];
+    sArchivo arch1;
+    sUnificado arch2;
+    rewind(pf1);
+    while(fgets(linea, TAM_LINEA, pf1))
+    {
+        leerLineaUnificado(linea, &arch1);
+        escribirLineaUnificado(pf2,arch1,&arch2);
+    }
+
+
+}
+
+void leerLineaUnificado(char* linea, sArchivo* arch)
+{
+   if(strchr(linea, '-'))
+        sscanf(linea, "\"%d-%d-%d\";\"%50[^\"]\";%17[^;];\"%30[^\"]\";%17[^;];%17[^;\n]",
+               &arch->fecha.anio, &arch->fecha.mes, &arch->fecha.dia, arch->nivel, arch->indice, arch->clasificador, arch->variacionmensual, arch->variacioninteranual);
+
+    char* nl = strchr(arch->indice, '\n');
+    if(nl)
+        *nl = '\0';
+}
+
+
+void escribirLineaUnificado(FILE* pf, sArchivo arch1, sUnificado* arch2)
+{
+
+    arch2->fecha = arch1.fecha;
+    strcpy(arch2->clasificador, arch1.clasificador);
+    strcpy(arch2->nivel, arch1.nivel);
+
+
+    strcpy(arch2->tipo, "indice_icc");
+    strcpy(arch2->valor, arch1.indice);
+    fprintf(pf, "\"%d-%d-%d\";\"%s\";\"%s\";\"%s\";\"%s\"\n",
+            arch2->fecha.anio, arch2->fecha.mes, arch2->fecha.dia,
+            arch2->clasificador, arch2->nivel, arch2->tipo, arch2->valor);
+
+
+    strcpy(arch2->tipo, "var_mensual");
+    strcpy(arch2->valor, arch1.variacionmensual);
+    fprintf(pf, "\"%d-%d-%d\";\"%s\";\"%s\";\"%s\";\"%s\"\n",
+            arch2->fecha.anio, arch2->fecha.mes, arch2->fecha.dia,
+            arch2->clasificador, arch2->nivel, arch2->tipo, arch2->valor);
+
+
+    strcpy(arch2->tipo, "var_interanual");
+    strcpy(arch2->valor, arch1.variacioninteranual);
+    fprintf(pf, "\"%d-%d-%d\";\"%s\";\"%s\";\"%s\";\"%s\"\n",
+            arch2->fecha.anio, arch2->fecha.mes, arch2->fecha.dia,
+            arch2->clasificador, arch2->nivel, arch2->tipo, arch2->valor);
 }
