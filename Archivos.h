@@ -6,7 +6,6 @@
 #include <string.h>
 
 #define TAM_LINEA 95
-#define ERR_ARCHIVO -1
 
 #define ARCH_ICC_GENERAL_CAPITULOS "indices_icc_general_capitulos.csv"
 #define ARCH_ITEMS_OBRA "Indices_items_obra.csv"
@@ -28,18 +27,18 @@ typedef struct
     char nivel[50];
     char indice[18];
     char clasificador[31];
-    char variacionmensual [6];
-    char variacioninteranual [8];
+    char variacionmensual [20];
+    char variacioninteranual [20];
 }sArchivo;
 
 typedef struct
 {
-    sFecha periodo;
+    sFecha fecha;
     char clasificador[31];
-    char nivel[50];
-    char variable[12];
-    double valor;
-}sArchBin;
+    char nivel[35];
+    char tipo[18];
+    char valor[25];
+}sUnificado;
 
 // FUNCIONES PRINCIPALES
 void archivoCorregir(FILE* pf, FILE* temp, const char* band);
@@ -51,8 +50,7 @@ void agregarCampo(sArchivo* arch, const char* band);
 FILE* ordenarArchivo (FILE* temp);
 FILE* AgregarVariacionMensual (FILE *temp);
 FILE* AgregarVariacionInteranual (FILE *temp);
-// int convertirABinario(FILE* temp);
-// void trozarArchivo (char* linea, sArchBin archBin);
+
 
 // FUNCIONES AUXILIARES
 void desencriptarICC(char* str);
@@ -67,4 +65,7 @@ void calcularVariacionMensual (sArchivo *vec_archivos, int cant_registros);
 double buscarIndiceActual (sArchivo *vec_archivos, int cant_registros, int i_mesAnterior, int *i_actual, const int band);
 void calcularVariacionMensual(sArchivo *vec_archivos, int cant_registros);
 void calcularVariacionInteranual(sArchivo *vec_archivos, int cant_registros);
+void crearArchivoUnificado(FILE* temp, FILE* arch);
+void escribirLineaUnificado(FILE* pf, sArchivo arch1, sUnificado* arch2);
+void leerLineaUnificado(char* linea, sArchivo* arch);
 #endif // ARCHIVOS_H_INCLUDED
